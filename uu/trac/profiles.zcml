@@ -1,0 +1,16 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:cmf="http://namespaces.zope.org/cmf"
+  xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+  i18n_domain="uu.trac">
+    
+    <!-- register extension profiles for add-on --> 
+    <genericsetup:registerProfile
+        name="default"
+        title="uu.trac: Trac ticket listing integration for Plone."
+        directory="profiles/default"
+        description="Components and content types for trac ticket listing."
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />  
+
+</configure>

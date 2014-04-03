@@ -1,0 +1,4 @@
+<object name="portal_types">
+  <object name="uu.trac.listing" meta_type="Dexterity FTI" />
+  <object name="uu.trac.ticket" meta_type="Dexterity FTI" />
+</object>

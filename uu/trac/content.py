@@ -10,6 +10,11 @@ from interfaces import ITracListing, ITracTicket
 from adapter import TracTickets
 
 
+def listing_change(context, event):
+    if context.url:
+        context.sync()
+
+
 class TracListing(Container):
     """Content class for trac listing"""
 

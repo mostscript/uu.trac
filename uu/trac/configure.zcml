@@ -18,4 +18,12 @@
   <!-- include Generic Setup extension profiles -->
   <include file="profiles.zcml" />
 
+  <!-- event handlers -->
+
+  <subscriber
+    for=".interfaces.ITracListing
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".content.listing_change"
+    />
+
 </configure>

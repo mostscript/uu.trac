@@ -26,13 +26,13 @@ class TracTickets(object):
             raise KeyError(key)
         return v
 
-    def get(self, key, default):
-        return self.proxy.get(int(key))[3]
+    def get(self, key, default=None):
+        return self.proxy.ticket.get(int(key))[3]
 
     def keys(self, q=None):
         if q is None:
-            return self.proxy.query()
-        return self.proxy.query(q)
+            return self.proxy.ticket.query()
+        return self.proxy.ticket.query(q)
 
     def iterkeys(self):
         return iter(self.keys())

@@ -22,7 +22,7 @@
 
   <subscriber
     for=".interfaces.ITracListing
-         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+         zope.lifecycleevent.interfaces.IObjectAddedEvent"
     handler=".content.listing_change"
     />
 

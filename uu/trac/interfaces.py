@@ -31,6 +31,7 @@ class ITracListing(model.Schema):
         description=u'List of prioritization categories for tickets.',
         value_type=schema.TextLine(),
         defaultFactory=list,
+        required=False,
         )
 
     def sync():
@@ -61,6 +62,7 @@ class ITracTicket(model.Schema):
     estimate = schema.Float(
         title=u'Estimated hours',
         default=0.0,
+        required=False,
         )
 
     milestone = schema.BytesLine(

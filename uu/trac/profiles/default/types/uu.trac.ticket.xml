@@ -15,7 +15,7 @@
   </property>
   
   <!-- schema interface -->
-  <property name="schema">uu.trac.interfaces.ITicket</property> 
+  <property name="schema">uu.trac.interfaces.ITracTicket</property> 
   
   <!-- class used for content items -->
   <property name="klass">uu.trac.content.TracTicket</property>
@@ -25,6 +25,7 @@
   
   <!-- enabled behaviors -->
   <property name="behaviors">
+    <element value="plone.app.dexterity.behaviors.metadata.IBasic"/>
     <element value="plone.app.content.interfaces.INameFromTitle" />
     <element value="plone.app.dexterity.behaviors.metadata.ICategorization" />
     <element value="plone.app.referenceablebehavior.referenceable.IReferenceable" />

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>    
+<layers> 
+  <layer name="uu.trac" 
+         interface="uu.trac.interfaces.ITracProductLayer" /> 
+</layers>
+

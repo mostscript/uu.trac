@@ -1,0 +1,79 @@
+/* ticket.css */
+
+.ticket-metadata {
+    width:60%;
+    float:left;
+}
+
+.ticket-detail table {
+    margin-left:0.4em;
+}
+
+.ticket-detail table th {
+    color:#999;
+    font-size:80%;
+    padding:0 0.5em;
+}
+
+.ticket-detail table td {
+    font-size:10px;
+    color:#666;
+    padding:0 0.5em;
+}
+
+.children td.est {
+    padding-left:1em;
+}
+
+.children .hrs {
+    display:inline-block;
+    width:2.2em;
+    text-align:right;
+}
+
+.wikitext pre {
+    font-size:80% !important;
+}
+
+.prioritization {
+    width:37%;
+    float:left;
+    background:#dfe;
+    border: 1px solid black;
+    padding:0.2em;
+}
+
+.prioritization .namedpriority label {
+    display:block;
+    float:left;
+    clear:both;
+    width:60%;
+}
+
+.prioritization .namedpriority input {
+    float:left;
+    width:35%;
+}
+
+.prioritization .namedpriority {
+    clear:both;
+    padding:0.5em 0.1em;
+}
+
+.prioritization .namedpriority:nth-child(2n-1) {
+    background-color:#eed;
+}
+
+.prioritization p.help {
+    clear:both;
+    font-size:80%;
+    font-style:italic;
+}
+
+div.status-note {
+    width:90%;
+    background-color:yellow;
+    color:#900;
+    padding-left:1.5em;
+    font-weight:bold;
+}

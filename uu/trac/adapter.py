@@ -31,8 +31,10 @@ class TracTickets(object):
 
     def keys(self, q=None):
         if q is None:
-            return self.proxy.ticket.query()
-        return self.proxy.ticket.query(q)
+            return sorted(self.proxy.ticket.query('max=0&status!=whatever'))
+        if 'status' not in q:
+            q = '%s&status!=whatever' % q  # include closed by default
+        return sorted(self.proxy.ticket.query('%s&max=0' % q))
 
     def iterkeys(self):
         return iter(self.keys())

@@ -4,5 +4,46 @@
   xmlns:grok="http://namespaces.zope.org/grok"
   xmlns:browser="http://namespaces.zope.org/browser"
   xmlns:five="http://namespaces.zope.org/five">
+
+  <browser:page
+    name="trac_sync"
+    for="..interfaces.ITracSyncable"
+    class=".views.SyncActionView"
+    permission="cmf.ModifyPortalContent"
+    layer="uu.trac.interfaces.ITracProductLayer"
+    />
+  
+  <browser:page
+    name="toggle_ticket"
+    for="..interfaces.ITracTicket"
+    class=".views.ToggleTicketActionView"
+    permission="cmf.ModifyPortalContent"
+    layer="uu.trac.interfaces.ITracProductLayer"
+    />
+
+  <browser:page
+    name="check_visibility"
+    for="..interfaces.ITracTicket"
+    class=".views.TicketVisibilityCheck"
+    permission="zope2.View"
+    layer="uu.trac.interfaces.ITracProductLayer"
+    allowed_attributes="is_visible"
+    />
+ 
+  <browser:page
+    name="ticket_view"
+    for="..interfaces.ITracTicket"
+    class=".views.TicketView"
+    template="ticket.pt"
+    permission="zope2.View"
+    layer="uu.trac.interfaces.ITracProductLayer"
+    />
+
+  <!-- resources -->
+  <browser:resourceDirectory
+    name="uu.trac"
+    directory="resources"
+    layer="uu.trac.interfaces.ITracProductLayer"
+    />
  
 </configure>

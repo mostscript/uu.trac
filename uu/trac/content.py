@@ -1,6 +1,5 @@
 from urllib2 import urlparse
 
-from ComputedAttribute import ComputedAttribute
 from zope.interface import implements
 from persistent.mapping import PersistentMapping
 from plone.dexterity.content import Container, Item
@@ -9,6 +8,9 @@ from plone.uuid.interfaces import IUUID
 
 from interfaces import ITracListing, ITracTicket
 from adapter import TracTickets
+
+
+_u = lambda v: v.decode('utf-8') if isinstance(v, str) else v
 
 
 def listing_change(context, event):
@@ -42,7 +44,8 @@ class TracListing(Container):
 
     def sync(self):
         adapter = self._adapter()
-        for number in adapter:
+        q = 'status!=closed'
+        for number in adapter.select(q):
             if str(number) not in self.objectIds():
                 self._add(number, adapter)
             else:
@@ -58,6 +61,9 @@ class TracTicket(Item):
         self.priorities = PersistentMapping()
         self.estimate = 0.0
 
+    def Title(self):
+        return '# %s: %s' % (self.getId(), self.title.encode('utf-8'))
+
     def _adapter(self):
         if getattr(self, '_v_trac_adapter', None) is None:
             self._v_trac_adapter = self.__parent__._adapter()
@@ -68,17 +74,19 @@ class TracTicket(Item):
         adapter = self._adapter()
         data = adapter.get(int(self.getId()))
         self._ticket_text = data.get('description', '')
+        self.title = _u(data.get('summary', self.getId()))
         self.component = data.get('component', '')
         self.task_type = data.get('type', '')
         self.status = data.get('status', '')
         self.milestone = data.get('milestone', '')
         # estimated hours assumes TimingAndEstimationPlugin
-        self.estimate = data.get('estimatedhours', 0.0)
+        self.estimate = float(data.get('estimatedhours', 0.0))
         # parent assumes ChildTicketsPlugin
         parent = data.get('parent', '')
         self.parent = int(parent[1:].strip()) if parent else None
+        self.reindexObject()
 
-    def _url(self):
+    def url(self):
         """
         Get the base URL from parent listing, but remove any
         authentication credentials -- then use to construct link
@@ -92,8 +100,6 @@ class TracTicket(Item):
         base = '%s://%s%s' % (parts.scheme, netloc, parts.path)
         return '/'.join((base, 'ticket', self.getId()))
 
-    url = ComputedAttribute(_url)
-
     def text(self):
         if not getattr(self, '_ticket_text', None):
             self.sync()
@@ -102,6 +108,7 @@ class TracTicket(Item):
     def children(self, uids=False):
         listing = self.__parent__
         keys = listing.select('parent=#%s' % self.getId())
+        keys = filter(lambda k: str(k) in listing, keys)
         if uids:
             _get = lambda k: listing.get(str(k))
             return [IUUID(_get(k)) for k in keys]

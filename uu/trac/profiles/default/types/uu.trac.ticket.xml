@@ -39,8 +39,8 @@
   </property>
 
   <!-- Method aliases -->
-  <alias from="(Default)" to="(dynamic view)" />
-  <alias from="view" to="(selected layout)" />
+  <alias from="(Default)" to="@@ticket_view" />
+  <alias from="view" to="@@ticket_view" />
   <alias from="edit" to="@@edit" />
   <alias from="sharing" to="@@sharing" />
  
@@ -52,6 +52,41 @@
   <action title="Edit" action_id="edit" category="object" condition_expr=""
           url_expr="string:${object_url}/edit" visible="True">
     <permission value="Modify portal content"/>
+  </action>
+  <action
+    title="Sync from upstream"
+    action_id="trac_sync"
+    category="object_buttons"
+    condition_expr=""
+    icon_expr=""
+    link_target=""
+    url_expr="string:${object_url}/@@trac_sync"
+    visible="True">
+    <permission value="Modify portal content" />
+  </action>
+
+  <action
+    title="Hide task in listing"
+    action_id="hide_ticket"
+    category="object_buttons"
+    condition_expr="context/@@check_visibility/is_visible"
+    icon_expr=""
+    link_target=""
+    url_expr="string:${object_url}/@@toggle_ticket"
+    visible="True">
+    <permission value="Modify portal content" />
+  </action>
+
+  <action
+    title="Show task in listing"
+    action_id="show_ticket"
+    category="object_buttons"
+    condition_expr="not:context/@@check_visibility/is_visible"
+    icon_expr=""
+    link_target=""
+    url_expr="string:${object_url}/@@toggle_ticket"
+    visible="True">
+    <permission value="Modify portal content" />
   </action>
 
 </object>

@@ -54,5 +54,16 @@
           url_expr="string:${object_url}/edit" visible="True">
     <permission value="Modify portal content"/>
   </action>
+  <action
+    title="Sync from upstream"
+    action_id="trac_sync"
+    category="object_buttons"
+    condition_expr=""
+    icon_expr=""
+    link_target=""
+    url_expr="string:${object_url}/@@trac_sync"
+    visible="True">
+    <permission value="Modify portal content" />
+  </action>
 
 </object>

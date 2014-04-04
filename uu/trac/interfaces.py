@@ -1,7 +1,14 @@
 from plone.directives import dexterity, form
 from plone.supermodel import model
+from zope.interface import Interface
 from zope.interface.common.mapping import IIterableMapping
 from zope import schema
+
+
+# layer interface for product views:
+
+class ITracProductLayer(Interface):
+    """Marker for plone.browserlayer"""
 
 
 # adapter interface:
@@ -13,9 +20,22 @@ class ITickets(IIterableMapping):
         """Given a text query for data source, limit result to some keys"""
 
 
+# common marker for syncable proxies:
+
+class ITracSyncable(Interface):
+    
+    def sync():
+        """
+        Sync local with upstream.  If local content is a listing, then
+        sync tickets contained with source, ensure that there is a
+        ticket proxy contained for each.  If local content is a ticket
+        proxy, then pull down and overwrite ticket metadata.
+        """
+
+
 # content interfaces:
 
-class ITracListing(model.Schema):
+class ITracListing(model.Schema, ITracSyncable):
     """Content for trac listing"""
 
     dexterity.read_permission(url='cmf.ModifyPortalContent')
@@ -34,17 +54,17 @@ class ITracListing(model.Schema):
         required=False,
         )
 
-    def sync():
-        """
-        Sync local tickets contained with source, ensure
-        that there is a ticket proxy contained for each.
-        """
-    
+    visible_tickets = schema.List(
+        title=u'Visible, considered tickets',
+        value_type=schema.Int(),
+        required=False,
+        )
+
     def select(query):
         """Convienience proxy for ITickets.select()"""
 
 
-class ITracTicket(model.Schema):
+class ITracTicket(model.Schema, ITracSyncable):
     """
     Content type for ticket proxy.  It is assumed that content will
     have title matching the ticket title (Trac "summary" field). Keywords
@@ -87,13 +107,6 @@ class ITracTicket(model.Schema):
         required=False,
         )
 
-    form.omitted('url')
-    url = schema.Bytes(
-        title=u'Link URL',
-        description=u'Computed hyperlink to ticket.',
-        readonly=True,
-        )
-
     form.omitted('priorities')
     priorities = schema.Dict(
         title=u'Priorities map',
@@ -101,6 +114,9 @@ class ITracTicket(model.Schema):
         value_type=schema.Int(),
         required=False,
         )
+
+    def url():
+        """Computed hyperlink to ticket in Trac"""
 
     def score():
         """Sum of priority scores"""
@@ -120,9 +136,6 @@ class ITracTicket(model.Schema):
         overlay using preformatted/plain text view, unless
         there is a facility for rendering.  Assume UTF-8 string.
         """
-
-    def sync():
-        """Sync metadata from upstream ticket source."""
 
     def children(uids=False):
         """

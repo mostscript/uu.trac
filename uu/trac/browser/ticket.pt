@@ -1,0 +1,95 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="uu.trac">
+<head>
+  <metal:block fill-slot="javascript_head_slot">
+
+    <script type="text/javascript"
+            src=""
+            tal:attributes="src string:${context/@@plone_portal_state/navigation_root_url}/++resource++uu.trac/ticket.js"></script>
+
+  </metal:block>
+  <metal:block fill-slot="style_slot">
+
+    <link rel="stylesheet" media="all" href="++resource++formlibrary.css" tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/++resource++uu.trac/ticket.css" type="text/css" />
+
+  </metal:block>
+</head>
+<body>
+<div metal:fill-slot="content-core">
+
+ <div class="upstream"><a href="" tal:attributes="href context/url" target="_blank">View in Trac</a></div>
+
+<div class="ticket-metadata">
+
+ <div class="ticket-detail ticket-basic">
+  <h3>Basic Information</h3>
+
+  <div class="status-note" tal:condition="not:context/@@check_visibility/is_visible">
+    This ticket is hidden from general listing.
+  </div>
+
+  <table>
+   <tr>
+    <th>Type</th>
+    <th>Component</th>
+    <th>Status</th>
+    <th>Hours (est)</th>
+    <th>Iteration/backlog</th>
+   </tr>
+   <tr>
+    <td><span tal:content="python:context.task_type">issue</span></td>
+    <td><span tal:content="python:context.component">Component</span></td>
+    <td><span tal:content="python:context.status">new</span></td>
+    <td><span tal:content="python:context.estimate">0.0</span></td>
+    <td><span tal:content="python:context.milestone">BACKLOG</span></td>
+   </tr>
+  </table>
+ </div>
+
+ <div class="ticket-detail children" tal:condition="context/children">
+  <h3>Child tickets</h3>
+  <table>
+   <tr tal:repeat="tnum context/children">
+    <tal:block define="child python:context.__parent__.get(str(tnum))">
+      <td>
+       <a target="_blank" href="" tal:attributes="href child/url" tal:content="child/Title"></a>
+      </td>
+      <td class="est" tal:condition="python: child.estimate > 0.0">
+       <span class="hrs" tal:content="child/estimate">0.0</span>
+      </td>
+    </tal:block>
+   </tr>
+  </table>
+ </div>
+
+</div>
+
+<div class="prioritization">
+ <h3>Prioritization</h3>
+ 
+ <form class="priorities" tal:define="priorities view/priorities">
+  <div class="namedpriority" tal:repeat="key python:priorities.keys()">
+   <label tal:content="key" />
+   <input type="text" />
+   <div style="clear:both"> </div>
+  </div>
+
+  <input type="submit" value="Save rankings" />
+ </form>
+
+ <p class="help">Note: you may choose to rank certain areas with greater weight than others by choosing non-uniform rating scales.</p>
+</div>
+
+ <hr style="clear:both" />
+ <div class="ticket-detail wikitext">
+  <h3>Detail</h3>
+  <pre tal:content="context/text" />
+ </div>
+
+</div>
+</body>
+</html>

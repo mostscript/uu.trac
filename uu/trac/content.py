@@ -1,4 +1,4 @@
-from urllib.urlparse import urlparse
+from urllib2 import urlparse
 
 from ComputedAttribute import ComputedAttribute
 from zope.interface import implements
@@ -85,7 +85,7 @@ class TracTicket(Item):
         to ticket.
         """
         baseurl = self.__parent__.url.split('/login')[0]
-        parts = urlparse(baseurl)
+        parts = urlparse.urlparse(baseurl)
         netloc = parts.netloc
         if '@' in netloc:
             netloc = netloc.split('@')[1]

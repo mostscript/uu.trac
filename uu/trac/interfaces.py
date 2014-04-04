@@ -1,6 +1,6 @@
 from plone.directives import dexterity, form
 from plone.supermodel import model
-from zope.interface.common.interfaces import IIterableMapping
+from zope.interface.common.mapping import IIterableMapping
 from zope import schema
 
 
@@ -76,7 +76,7 @@ class ITracTicket(model.Schema):
 
     task_type = schema.BytesLine(
         title=u'Task type',
-        description='Type of task',
+        description=u'Type of task',
         required=False,
         )
 

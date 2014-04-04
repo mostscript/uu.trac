@@ -2,6 +2,7 @@ from urllib.urlparse import urlparse
 
 from ComputedAttribute import ComputedAttribute
 from zope.interface import implements
+from persistent.mapping import PersistentMapping
 from plone.dexterity.content import Container, Item
 from plone.dexterity.utils import createContentInContainer
 from plone.uuid.interfaces import IUUID
@@ -52,6 +53,11 @@ class TracTicket(Item):
     
     implements(ITracTicket)
 
+    def __init__(self, id=None, **kwargs):
+        super(TracTicket, self).__init__(id, **kwargs)
+        self.priorities = PersistentMapping()
+        self.estimate = 0.0
+
     def _adapter(self):
         if getattr(self, '_v_trac_adapter', None) is None:
             self._v_trac_adapter = self.__parent__._adapter()
@@ -100,4 +106,12 @@ class TracTicket(Item):
             _get = lambda k: listing.get(str(k))
             return [IUUID(_get(k)) for k in keys]
         return keys
+
+    def score(self):
+        return sum(self.priorities.values())
+
+    def reward_ratio(self):
+        if self.estimate > 0.0:
+            return self.score() / self.estimate
+        return None
 

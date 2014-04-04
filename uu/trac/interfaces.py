@@ -26,6 +26,13 @@ class ITracListing(model.Schema):
         required=True,
         )
 
+    prioritization_categories = schema.List(
+        title=u'Prioritization categories',
+        description=u'List of prioritization categories for tickets.',
+        value_type=schema.TextLine(),
+        defaultFactory=list,
+        )
+
     def sync():
         """
         Sync local tickets contained with source, ensure
@@ -84,6 +91,25 @@ class ITracTicket(model.Schema):
         description=u'Computed hyperlink to ticket.',
         readonly=True,
         )
+
+    form.omitted('priorities')
+    priorities = schema.Dict(
+        title=u'Priorities map',
+        key_type=schema.TextLine(),
+        value_type=schema.Int(),
+        required=False,
+        )
+
+    def score():
+        """Sum of priority scores"""
+
+    def reward_ratio():
+        """
+        self.score() / (self.estimate) -- if self.estimate, otherwise,
+        return None (as we do not want to rank low hanging fruit
+        on a task of unknown effort, and do not trust that a zero
+        estimate is accurate.  Returns float.
+        """
 
     def text():
         """

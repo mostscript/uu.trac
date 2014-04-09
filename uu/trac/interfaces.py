@@ -53,6 +53,11 @@ class ITitledTerm(Interface):
         required=False,
         )
 
+    note = schema.Text(
+        title=u'Note',
+        required=False,
+        )
+
 
 class ITracListing(model.Schema, ITracSyncable):
     """Content for trac listing"""
@@ -77,6 +82,7 @@ class ITracListing(model.Schema, ITracSyncable):
     form.widget(visible_tickets=TextLinesFieldWidget)
     visible_tickets = schema.List(
         title=u'Visible, considered tickets',
+        description=u'Enter one ticket number per line.',
         value_type=schema.Int(),
         required=False,
         )

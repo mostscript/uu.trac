@@ -1,6 +1,7 @@
 from urllib2 import urlparse
 
 from BTrees.IOBTree import IOBTree
+from BTrees.IIBTree import IIBTree
 from zope.interface import implements
 from persistent.mapping import PersistentMapping
 from persistent.list import PersistentList
@@ -15,9 +16,17 @@ from adapter import TracTickets
 _u = lambda v: v.decode('utf-8') if isinstance(v, str) else v
 
 
-def listing_change(context, event):
+# event handlers:
+def listing_change(context, event=None):
+    """Sync listing on (add) event"""
     if context.url:
         context.sync()
+
+
+def reindex_scores(context, event=None):
+    """Reindex ticket scores on ticket modify"""
+    listing = context.__parent__
+    listing.index(context)
 
 
 class TracListing(Container):
@@ -30,6 +39,9 @@ class TracListing(Container):
         # manage an index of parent-to-child, int parent ticket id key
         # to PersistentList of int ticket id value:
         self._children = IOBTree()
+        # indexes for score and reward-ratio values:
+        self._scores = IIBTree()  # int (ticket#) -> int (sum/score)
+        self._reward = IOBTree()  # int (ticket#) -> float (ratio)
 
     def index_parent_child(self, parent, child=None):
         if ITracTicket.providedBy(parent):
@@ -80,6 +92,28 @@ class TracListing(Container):
     def children_for(self, ticket_number):
         return list(self._children.get(int(ticket_number), []))
 
+    def result(self, reward=False):
+        """
+        Return sorted listing of tuples with ticket number, score.
+        If reward is True, use reward-ratio instead of score.
+        """
+        keyfn = lambda t: t[1]  # sort function, on score, not ticket
+        _sorted = lambda l: sorted(l, key=keyfn, reverse=True)
+        _visible = lambda t: t[0] in self.visible_tickets
+        if reward:
+            return _sorted(filter(_visible, self._reward.items()))
+        return _sorted(filter(_visible, self._scores.items()))
+
+    def index(self, ticket):
+        if not ITracTicket.providedBy(ticket):
+            ticket = self.get(int(ticket))
+        tid = int(ticket.getId())
+        parent = ticket.parent
+        if parent:
+            self.index_parent_child(parent, tid)
+        self._scores[tid] = ticket.score()
+        self._reward[tid] = ticket.reward_ratio()
+
 
 class TracTicket(Item):
     
@@ -100,6 +134,7 @@ class TracTicket(Item):
 
     def sync(self):
         """Sync local metadata with upstream."""
+        listing = self.__parent__
         adapter = self._adapter()
         data = adapter.get(int(self.getId()))
         self._ticket_text = data.get('description', '')
@@ -113,8 +148,7 @@ class TracTicket(Item):
         # parent assumes ChildTicketsPlugin
         parent = data.get('parent', '')
         self.parent = int(parent[1:].strip()) if parent else None
-        if self.parent:
-            self.__parent__.index_parent_child(self.parent, self.getId())
+        listing.index(self)
         self.reindexObject()
 
     def url(self):

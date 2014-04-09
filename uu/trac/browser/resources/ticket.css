@@ -122,3 +122,69 @@ div.status-note {
     padding-left:1.5em;
     font-weight:bold;
 }
+
+/* rubric display */
+
+div.term {
+    background-color:#ffd;
+    border-bottom:1px solid #999;
+    margin-left:0.8em;
+    margin-bottom:0.2em;
+    padding:0.8em;
+}
+
+/* listing display */
+
+.priorities-form li {
+    display:block;
+    list-style-type:none;
+    background-color:#dde;
+    padding:0.3em 1em;
+}
+
+.priorities-form li h4 {
+}
+
+.priorities-form li .priorities {
+    margin-top:0.3em;
+    padding:0.1em 0.5em;
+    background-color:#cdd;
+}
+
+.priorities-form li .priorities h4 {
+    width:8em;
+    font-size:100%;
+    float:left;
+}
+
+.priorities-form li div.detail {
+    background-color:#ddd;
+    border:1px solid #aaa;
+    width:64em;
+    margin-left:1em;
+}
+
+.priorities-form li div.detail .detail-value {
+    float:left;
+    width:8em;
+}
+
+.priorities-form li div.detail .childtask-len {
+    float:left;
+    width:32em;
+}
+
+.priorities-form li table.priority-grid {
+    width:82%;
+    float:left;
+}
+
+.priorities-form li table.priority-grid td, 
+.priorities-form li table.priority-grid th {
+    max-width:9em;
+}
+
+.priorities-form li table.priority-grid td input {
+    width:60%;
+    font-weight:bold;
+} 

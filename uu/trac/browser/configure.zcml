@@ -36,6 +36,15 @@
     class=".views.TicketView"
     template="ticket.pt"
     permission="zope2.View"
+    allowed_attributes="priority_keys priority_labels priorities"
+    layer="uu.trac.interfaces.ITracProductLayer"
+    />
+
+  <browser:page
+    name="listing_rubric"
+    for="..interfaces.ITracListing"
+    template="rubric.pt"
+    permission="zope2.View"
     layer="uu.trac.interfaces.ITracProductLayer"
     />
 

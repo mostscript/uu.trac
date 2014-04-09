@@ -20,9 +20,69 @@
 </head>
 <body>
 <div metal:fill-slot="content-core">
-
   <h3>Listing detail</h3>
 
+  <div class="control">
+    <label>Sort by:</label>
+    <a tal:condition="python:request.get('sort') not in ('score', None)"
+       href=""
+       tal:attributes="href string:${context/absolute_url}?sort=score">Priority score</a> 
+    <em tal:condition="python:request.get('sort') in ('score', None)">Priority score</em> 
+    | 
+    <a tal:condition="python:request.get('sort')!='reward'"
+       href=""
+       tal:attributes="href string:${context/absolute_url}?sort=reward">Reward ratio</a> 
+    <em tal:condition="python:request.get('sort')=='reward'">Reward ratio</em> 
+  </div>
+<form class="priorities-form" method="post">
+  <ul tal:define="result python:context.result() if request.get('sort') != 'reward' else context.result(reward=True)">
+    <li tal:repeat="pair result">
+      <tal:block define="tnum python:pair[0];
+                         ticket python:context.get(str(tnum));
+                         tview nocall:ticket/@@ticket_view;
+                         tupdate python:tview.update();">
+        
+        <h4><a href="" tal:attributes="href ticket/absolute_url" tal:content="ticket/Title"># TITLE</a></h4>
+        <div class="detail">
+            <div class="childtask-len" tal:condition="ticket/children">
+                <a href="" tal:attributes="href ticket/absolute_url" tal:content="python:len(ticket.children())">#</a>
+                child tasks contained.
+            </div>
+            <div class="childtask-len" tal:condition="not:ticket/children">&nbsp;</div>
+            <div class="detail-value" tal:content="ticket/component">COMPONENT</div>
+            <div class="detail-value" tal:content="ticket/task_type">TYPE</div>
+            <div class="detail-value" tal:content="ticket/estimate">EST</div>
+            <div class="detail-value scores">
+                <span class="score-value" tal:content="ticket/score">SCORE</span> / 
+                <span class="reward-value" tal:content="python:'%.3f' % ticket.reward_ratio()">REWARD</span>
+            </div>
+            <div style="clear:both;"> </div>
+        </div>
+        <div class="priorities">
+            <h4>Priority rankings, by area
+                <a class="rubriclink" href="" tal:attributes="href string:${context/absolute_url}/@@listing_rubric"><img src="info_icon.png" /></a>
+            </h4>
+            <table class="priority-grid">
+                <tr>
+                   <th tal:repeat="pkey python:tview.priority_keys()">
+                     <span tal:replace="python: tview.priority_label(pkey)"></span>
+                   </th>
+                </tr>
+                <tr>
+                   <td tal:repeat="pkey python:tview.priority_keys()">
+                     <input tal:attributes="value python: tview.priorities().get(pkey);
+                                            name string:priority-${tnum}-${pkey};" />
+                   </td>
+                </tr>
+    
+            </table>
+            <div style="clear:both;"> </div>
+        </div>
+      </tal:block>
+    </li>
+  </ul>
+  <input value="Save prioritization" class="savebtn" name="save.priorities" type="submit" />
+</form>
 </div>
 </body>
 </html>

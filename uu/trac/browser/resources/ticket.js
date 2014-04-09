@@ -1,7 +1,11 @@
 
 (function ($) {
     $(document).ready(function () {
-        // TODO
+        /* overlays */
+        $('a.rubriclink').prepOverlay({
+             subtype: 'ajax',
+             filter: 'div#content-core'
+        });
     });
 
 }(jQuery));

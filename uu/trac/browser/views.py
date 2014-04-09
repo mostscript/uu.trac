@@ -1,4 +1,6 @@
 from Products.statusmessages.interfaces import IStatusMessage
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.event import notify
 
 from uu.trac.interfaces import ITracListing
 
@@ -115,6 +117,8 @@ class TicketView(TemplatedView):
         for known in self._priority_keys:
             if known in data:
                 self.context.priorities[known] = conv(data.get(known))
+        if known:
+            notify(ObjectModifiedEvent(self.context))
 
     def update(self, *args, **kwargs):
         self._load_priorities()

@@ -26,4 +26,10 @@
     handler=".content.listing_change"
     />
 
+  <subscriber
+    for=".interfaces.ITracTicket
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".content.reindex_scores"
+    />
+
 </configure>

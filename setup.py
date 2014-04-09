@@ -32,6 +32,7 @@ setup(
         'plone.app.dexterity',
         'plone.uuid',
         'Products.CMFPlone>=4.3',
+        'collective.z3cform.datagridfield>=0.15',
         # -*- Extra requirements: -*-
     ],
     extras_require = {

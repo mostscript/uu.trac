@@ -1,3 +1,4 @@
+from collective.z3cform.datagridfield import DataGridFieldFactory, DictRow
 from plone.directives import dexterity, form
 from plone.supermodel import model
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
@@ -36,6 +37,23 @@ class ITracSyncable(Interface):
 
 # content interfaces:
 
+class ITitledTerm(Interface):
+    """
+    Vocabulary-term interface, with an identifier value, and a
+    title value.
+    """
+
+    value = schema.TextLine(
+        title=u'Identifier',
+        required=True,
+        )
+
+    title = schema.TextLine(
+        title=u'Title',
+        required=False,
+        )
+
+
 class ITracListing(model.Schema, ITracSyncable):
     """Content for trac listing"""
 
@@ -47,10 +65,11 @@ class ITracListing(model.Schema, ITracSyncable):
         required=True,
         )
 
+    form.widget(prioritization_categories=DataGridFieldFactory)
     prioritization_categories = schema.List(
         title=u'Prioritization categories',
         description=u'List of prioritization categories for tickets.',
-        value_type=schema.TextLine(),
+        value_type=DictRow(schema=ITitledTerm),
         defaultFactory=list,
         required=False,
         )

@@ -70,15 +70,26 @@
 
 <div class="prioritization">
  <h3>Prioritization</h3>
+
+ <div class="scores">
+    <div class="score"><h4>Score</h4><p tal:content="context/score">0.0</p></div>
+    <div class="reward"><h4>Reward ratio</h4><p tal:content="context/reward_ratio">0.0</p></div>
+    <div style="clear:both">&nbsp;</div>
+ </div>
  
- <form class="priorities" tal:define="priorities view/priorities">
-  <div class="namedpriority" tal:repeat="key python:priorities.keys()">
-   <label tal:content="key" />
-   <input type="text" />
+ <form method="post" class="priorities" tal:define="priorities view/priorities">
+  <div class="namedpriority" tal:repeat="key view/priority_keys">
+   <label tal:content="python:view.priority_label(key)" />
+   <input type="text"
+          value=""
+          name=""
+          tal:attributes="name string:priority-${key};
+                          value python:priorities.get(key, '');"
+          />
    <div style="clear:both"> </div>
   </div>
 
-  <input type="submit" value="Save rankings" />
+  <input class="savebtn" type="submit" name="save.priorities" value="Save rankings" />
  </form>
 
  <p class="help">Note: you may choose to rank certain areas with greater weight than others by choosing non-uniform rating scales.</p>

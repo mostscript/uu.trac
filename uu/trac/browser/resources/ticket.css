@@ -41,6 +41,30 @@
     text-align:center;
 }
 
+.score, .reward {
+    color:black;
+    background-color:white;
+}
+
+.prioritization .scores {
+    margin-bottom:0.4em;
+}
+
+.prioritization .score, .prioritization .reward {
+    float:left;
+    width:46%;
+    margin-right:0.3em;
+    padding:0.2em;
+}
+
+.score, .reward h4 {
+    color:black;
+}
+
+.prioritization .score {
+    background-color:yellow;
+}
+
 .prioritization input {
     padding:0.3em;
     font-size:120%;

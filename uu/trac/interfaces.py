@@ -1,5 +1,6 @@
 from plone.directives import dexterity, form
 from plone.supermodel import model
+from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from zope.interface import Interface
 from zope.interface.common.mapping import IIterableMapping
 from zope import schema
@@ -54,6 +55,7 @@ class ITracListing(model.Schema, ITracSyncable):
         required=False,
         )
 
+    form.widget(visible_tickets=TextLinesFieldWidget)
     visible_tickets = schema.List(
         title=u'Visible, considered tickets',
         value_type=schema.Int(),

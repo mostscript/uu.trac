@@ -1,7 +1,9 @@
 from urllib2 import urlparse
 
+from BTrees.IOBTree import IOBTree
 from zope.interface import implements
 from persistent.mapping import PersistentMapping
+from persistent.list import PersistentList
 from plone.dexterity.content import Container, Item
 from plone.dexterity.utils import createContentInContainer
 from plone.uuid.interfaces import IUUID
@@ -23,6 +25,23 @@ class TracListing(Container):
 
     implements(ITracListing)
 
+    def __init__(self, id=None, **kwargs):
+        super(TracListing, self).__init__(id, **kwargs)
+        # manage an index of parent-to-child, int parent ticket id key
+        # to PersistentList of int ticket id value:
+        self._children = IOBTree()
+
+    def index_parent_child(self, parent, child=None):
+        if ITracTicket.providedBy(parent):
+            parent = parent.getId()
+        if ITracTicket.providedBy(child):
+            child = child.getId()
+        parent = int(parent)
+        child = int(child) if child else None
+        self._children[parent] = self._children.get(parent, PersistentList())
+        if child is not None:
+            self._children[parent].append(child)
+
     def _adapter(self):
         if getattr(self, '_v_trac_adapter', None) is None:
             self._v_trac_adapter = TracTickets(self)  # adapt once
@@ -41,15 +60,25 @@ class TracListing(Container):
             title=unicode(ticket_number),
             )
         content.sync()
+        # check for and recursively add child tickets:
+        childq = 'parent=~#%s' % ticket_number
+        children = adapter.select(childq)
+        for child_id in children:
+            self._add(child_id, adapter)
 
     def sync(self):
         adapter = self._adapter()
+        self._children = IOBTree()   # reset all parent/child refs
         q = 'status!=closed'
         for number in adapter.select(q):
             if str(number) not in self.objectIds():
-                self._add(number, adapter)
+                if number in (self.visible_tickets or []):
+                    self._add(number, adapter)
             else:
                 self.get(str(number)).sync()
+
+    def children_for(self, ticket_number):
+        return list(self._children.get(int(ticket_number), []))
 
 
 class TracTicket(Item):
@@ -84,6 +113,8 @@ class TracTicket(Item):
         # parent assumes ChildTicketsPlugin
         parent = data.get('parent', '')
         self.parent = int(parent[1:].strip()) if parent else None
+        if self.parent:
+            self.__parent__.index_parent_child(self.parent, self.getId())
         self.reindexObject()
 
     def url(self):
@@ -107,7 +138,7 @@ class TracTicket(Item):
 
     def children(self, uids=False):
         listing = self.__parent__
-        keys = listing.select('parent=#%s' % self.getId())
+        keys = listing.children_for(int(self.getId()))
         keys = filter(lambda k: str(k) in listing, keys)
         if uids:
             _get = lambda k: listing.get(str(k))

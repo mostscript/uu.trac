@@ -7,6 +7,7 @@
 
 .ticket-detail table {
     margin-left:0.4em;
+    width:95%;
 }
 
 .ticket-detail table th {
@@ -16,7 +17,7 @@
 }
 
 .ticket-detail table td {
-    font-size:10px;
+    font-size:12px;
     color:#666;
     padding:0 0.5em;
 }
@@ -35,10 +36,30 @@
     font-size:80% !important;
 }
 
+.prioritization h3 {
+    color:#afc;
+    text-align:center;
+}
+
+.prioritization input {
+    padding:0.3em;
+    font-size:120%;
+    font-weight:bold;
+    border:1px solid #999;
+    outline:none;
+}
+
+.prioritization input.savebtn {
+    padding:0.3em 1em;
+    text-align:center;
+    margin:0.5em;
+}
+
 .prioritization {
     width:37%;
     float:left;
-    background:#dfe;
+    background:#062;
+    color:white;
     border: 1px solid black;
     padding:0.2em;
 }
@@ -61,7 +82,7 @@
 }
 
 .prioritization .namedpriority:nth-child(2n-1) {
-    background-color:#eed;
+    background-color:#093;
 }
 
 .prioritization p.help {

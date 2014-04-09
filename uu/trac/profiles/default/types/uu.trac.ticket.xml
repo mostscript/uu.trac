@@ -49,10 +49,27 @@
           url_expr="string:${object_url}" visible="True">
     <permission value="View"/>
   </action>
-  <action title="Edit" action_id="edit" category="object" condition_expr=""
-          url_expr="string:${object_url}/edit" visible="True">
+  <!-- hide edit in actions menu: -->
+  <action 
+    title="Edit"
+    action_id="edit"
+    category="object"
+    condition_expr="python:request.get('PATH_INFO').endswith('edit')"
+    url_expr="string:${object_url}/edit"
+    visible="True">
     <permission value="Modify portal content"/>
   </action>
+  <action
+    title="Edit configuration"
+    action_id="edit1"
+    category="object_buttons"
+    condition_expr=""
+    url_expr="string:${object_url}/edit"
+    visible="True">
+    <permission value="Modify portal content"/>
+  </action>
+
+  <!-- menu actions: -->
   <action
     title="Sync from upstream"
     action_id="trac_sync"
@@ -64,7 +81,6 @@
     visible="True">
     <permission value="Modify portal content" />
   </action>
-
   <action
     title="Hide task in listing"
     action_id="hide_ticket"
@@ -76,7 +92,6 @@
     visible="True">
     <permission value="Modify portal content" />
   </action>
-
   <action
     title="Show task in listing"
     action_id="show_ticket"

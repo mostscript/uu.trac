@@ -1,0 +1,28 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="uu.trac">
+<head>
+  <metal:block fill-slot="javascript_head_slot">
+
+    <script type="text/javascript"
+            src=""
+            tal:attributes="src string:${context/@@plone_portal_state/navigation_root_url}/++resource++uu.trac/ticket.js"></script>
+
+  </metal:block>
+  <metal:block fill-slot="style_slot">
+
+    <link rel="stylesheet" media="all" href="++resource++formlibrary.css" tal:attributes="href string:${context/@@plone_portal_state/navigation_root_url}/++resource++uu.trac/ticket.css" type="text/css" />
+
+  </metal:block>
+</head>
+<body>
+<div metal:fill-slot="content-core">
+
+  <h3>Listing detail</h3>
+
+</div>
+</body>
+</html>

@@ -39,6 +39,24 @@
     layer="uu.trac.interfaces.ITracProductLayer"
     />
 
+  <browser:page
+    name="listing_view"
+    for="..interfaces.ITracListing"
+    class=".views.ListingView"
+    template="listing.pt"
+    permission="zope2.View"
+    layer="uu.trac.interfaces.ITracProductLayer"
+    />
+
+  <browser:page
+    name="import"
+    for="..interfaces.ITracListing"
+    class=".views.ListingImport"
+    template="import.pt"
+    permission="cmf.ModifyPortalContent"
+    layer="uu.trac.interfaces.ITracProductLayer"
+    />
+
   <!-- resources -->
   <browser:resourceDirectory
     name="uu.trac"

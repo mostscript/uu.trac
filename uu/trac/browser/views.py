@@ -3,12 +3,31 @@ from Products.statusmessages.interfaces import IStatusMessage
 from uu.trac.interfaces import ITracListing
 
 
-class SyncActionView(object):
-    
+class BaseView(object):
+   
+    status = None
+ 
     def __init__(self, context, request):
         self.context = context
         self.request = request
-        self.status = IStatusMessage(self.request)
+        if self.status is None:
+            self.status = IStatusMessage(self.request)
+
+
+class TemplatedView(BaseView):
+    
+    index = None  # provided by Five view magic
+
+    def update(self, *args, **kwargs):
+        pass  # no default operations, subclasses override
+
+    def __call__(self, *args, **kwargs):
+        self.update(*args, **kwargs)
+        return self.index(*args, **kwargs)
+
+
+class SyncActionView(BaseView):
+    """Menu item acts, sets status, redirects back to context"""
 
     def __call__(self, *args, **kwargs):
         listing = ITracListing.providedBy(self.context)
@@ -20,11 +39,10 @@ class SyncActionView(object):
         self.request.response.redirect(self.context.absolute_url())
 
 
-class TicketVisibilityCheck(object):
+class TicketVisibilityCheck(BaseView):
+    """View used only for checking ticket visibility in TALES conditions"""
     
-    def __init__(self, context, request=None):
-        self.context = context
-        self.request = request
+    status = False  # suppress construction of status adapter
 
     def is_visible(self):
         listing = self.context.__parent__
@@ -36,13 +54,8 @@ class TicketVisibilityCheck(object):
         self.request.response.redirect(self.context.absolute_url())
 
 
-class ToggleTicketActionView(object):
+class ToggleTicketActionView(BaseView):
     """Toggles ticket as hidden or shown in listing"""
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-        self.status = IStatusMessage(self.request)
 
     def toggle(self):
         listing = self.context.__parent__
@@ -65,14 +78,8 @@ class ToggleTicketActionView(object):
         self.request.response.redirect(context.absolute_url())
 
 
-class TicketView(object):
-
-    index = None  # provided by Five view magic
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-        self.status = IStatusMessage(self.request)
+class TicketView(TemplatedView):
+    """Standard view for a ticket"""
 
     def priorities(self):
         keys = getattr(
@@ -86,7 +93,17 @@ class TicketView(object):
     def update(self, *args, **kwargs):
         pass  # TODO
 
-    def __call__(self, *args, **kwargs):
-        self.update(*args, **kwargs)
-        return self.index(*args, **kwargs)
+
+class ListingView(TemplatedView):
+    """Standard view for a listing"""
+
+    def update(self, *args, **kwargs):
+        pass  # TODO
+
+
+class ListingImport(TemplatedView):
+    """View importable tickets, support form for selection"""
+
+    def update(self, *args, **kwargs):
+        pass  # TODO
 

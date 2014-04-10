@@ -284,3 +284,12 @@ em.subtle {
     color:#999 !important;
     font-size:90%;
 }
+
+.rubric-link-listing {
+    display:inline-block;
+    padding-left:3em;
+}
+
+.rubric-link-listing a {
+    color:#205c90 !important;
+}

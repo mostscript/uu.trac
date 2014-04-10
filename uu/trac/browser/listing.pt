@@ -30,7 +30,10 @@
     <a tal:condition="python:request.get('sort')!='reward'"
        href=""
        tal:attributes="href string:${context/absolute_url}?sort=reward">Reward ratio</a> 
-    <em tal:condition="python:request.get('sort')=='reward'">Reward ratio</em> 
+    <em tal:condition="python:request.get('sort')=='reward'">Reward ratio</em>
+    <span class="rubric-link-listing">
+        <a class="rubriclink" href="" style="color:navy" title="View prioritization rubric" tal:attributes="href string:${context/absolute_url}/@@listing_rubric  "><img src="info_icon.png" alt="View prioritization rubric" /> View rubric for prioritization</a>
+    </span>
   </div>
 <form class="priorities-form" method="post">
   <ul tal:define="result python:context.result() if request.get('sort') != 'reward' else context.result(reward=True)">

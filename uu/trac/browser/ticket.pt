@@ -21,7 +21,11 @@
 <body>
 <div metal:fill-slot="content-core">
 
- <div class="upstream"><a href="" tal:attributes="href context/url" target="_blank">View in Trac</a></div>
+ <div class="upstream">
+    <span style="color:gray">&gt;&gt;&gt;</span>
+    <a href="" tal:attributes="href context/url" target="_blank">View in Trac</a> | 
+    <a href="" tal:attributes="href python:context.__parent__.absolute_url()" target="_blank">Back to listing</a>
+</div>
 
 <div class="ticket-metadata">
 
@@ -56,7 +60,7 @@
    <tr tal:repeat="tnum context/children">
     <tal:block define="child python:context.__parent__.get(str(tnum))">
       <td>
-       <a target="_blank" href="" tal:attributes="href child/url" tal:content="child/Title"></a>
+       <a target="_blank" href="" tal:attributes="href child/absolute_url" tal:content="child/Title"></a>
       </td>
       <td class="est" tal:condition="python: child.estimate > 0.0">
        <span class="hrs" tal:content="child/estimate">0.0</span>
@@ -68,7 +72,7 @@
 
 </div>
 
-<div class="prioritization">
+<div class="prioritization" tal:define="listing python:context.__parent__">
  <h3>Prioritization</h3>
 
  <div class="scores">
@@ -76,7 +80,7 @@
     <div class="reward"><h4>Reward ratio</h4><p tal:content="context/reward_ratio">0.0</p></div>
     <div style="clear:both">&nbsp;</div>
  </div>
- 
+
  <form method="post" class="priorities" tal:define="priorities view/priorities">
   <div class="namedpriority" tal:repeat="key view/priority_keys">
    <label tal:content="python:view.priority_label(key)" />
@@ -93,6 +97,10 @@
  </form>
 
  <p class="help">Note: you may choose to rank certain areas with greater weight than others by choosing non-uniform rating scales.</p>
+<div style="text-align:center">
+    <a class="rubriclink" href="" style="color:navy" title="View prioritization rubric" tal:attributes="href string:${listing/absolute_url}/@@listing_rubric"><img src="info_icon.png" alt="View prioritization rubric" /> View rubric for prioritization</a>
+</div>
+ 
 </div>
 
  <hr style="clear:both" />

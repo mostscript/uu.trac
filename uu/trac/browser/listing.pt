@@ -20,8 +20,6 @@
 </head>
 <body>
 <div metal:fill-slot="content-core">
-  <h3>Listing detail</h3>
-
   <div class="control">
     <label>Sort by:</label>
     <a tal:condition="python:request.get('sort') not in ('score', None)"
@@ -36,6 +34,17 @@
   </div>
 <form class="priorities-form" method="post">
   <ul tal:define="result python:context.result() if request.get('sort') != 'reward' else context.result(reward=True)">
+    <li class="heading-item">
+      <div class="detail detail-heading">
+            <div class="childtask-len">Task ID/description</div>
+            <div class="detail-value">Component</div>
+            <div class="detail-value">Type</div>
+            <div class="detail-value">Estimate</div>
+            <div class="detail-value">Score <em class="subtle">/ reward ratio vs effort</em></div>
+            <div style="clear:both;"> </div>
+
+      </div>
+    </li>
     <li tal:repeat="pair result">
       <tal:block define="tnum python:pair[0];
                          ticket python:context.get(str(tnum));
@@ -60,7 +69,7 @@
         </div>
         <div class="priorities">
             <h4>Priority rankings, by area
-                <a class="rubriclink" href="" tal:attributes="href string:${context/absolute_url}/@@listing_rubric"><img src="info_icon.png" /></a>
+                <a class="rubriclink" href="" title="View prioritization rubric" tal:attributes="href string:${context/absolute_url}/@@listing_rubric"><img src="info_icon.png" alt="View prioritization rubric" /></a>
             </h4>
             <table class="priority-grid">
                 <tr>

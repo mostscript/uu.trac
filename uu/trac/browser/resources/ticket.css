@@ -135,11 +135,32 @@ div.term {
 
 /* listing display */
 
+body.template-listing_view #content-core {
+    border-left:0.5em solid #89a;
+    border-top:1px solid #89a;
+    padding-left:0.2em;
+}
+
+div.control {
+    margin-top:0.4em;
+}
+
+body.template-listing_view #content-core .priorities-form ul {
+    list-style-type:none;
+    margin-left:0.1em;
+}
+
+
 .priorities-form li {
     display:block;
     list-style-type:none;
     background-color:#dde;
     padding:0.3em 1em;
+    border-left:1px solid #666;
+}
+
+.priorities-form li:nth-child(2n-1) {
+    background-color:#c9d0d9;
 }
 
 .priorities-form li h4 {
@@ -148,7 +169,7 @@ div.term {
 .priorities-form li .priorities {
     margin-top:0.3em;
     padding:0.1em 0.5em;
-    background-color:#cdd;
+    background-color:white;
 }
 
 .priorities-form li .priorities h4 {
@@ -157,21 +178,64 @@ div.term {
     float:left;
 }
 
+#content .priorities-form li .priorities h4 a {
+    border-bottom:none !important;
+}
+
 .priorities-form li div.detail {
-    background-color:#ddd;
+    background-color:#ffa;
     border:1px solid #aaa;
-    width:64em;
+    width:auto;
+    max-width:100%;
     margin-left:1em;
+    font-size:90%;
+}
+
+.priorities-form li div.detail.detail-heading {
+    background-color:white;
+    border:none;
+    border-bottom:1px solid #999;
+}
+
+.priorities-form li.heading-item {
+    margin-top:0.5em;
+    padding:1px 0 0.15em 0;
+    background-color: navy;
+}
+
+.priorities-form li.heading-item .detail-value:nth-child(5) {
+    width:auto !important;
+    max-width:100%;
+}
+
+.priorities-form li.heading-item div.detail {
+    max-width:100%;
+    width:auto;
+    margin-left:0;
+    padding:0;
+}
+
+.priorities-form li div.detail.detail-heading .childtask-len {
+    background-color:#90bad0;
+    border-bottom:#205C90;
+    margin-left:0;
+    width:33.1em;
+    padding-left:1.2em;
 }
 
 .priorities-form li div.detail .detail-value {
+    background-color:#fff;
     float:left;
-    width:8em;
+    width:7.4em;
+    padding-left:0.3em;
+    border-left:1px dotted #999;
 }
 
 .priorities-form li div.detail .childtask-len {
+    background-color:#fff;
     float:left;
-    width:32em;
+    width:31.7em;
+    padding-left:0.3em;
 }
 
 .priorities-form li table.priority-grid {
@@ -182,9 +246,41 @@ div.term {
 .priorities-form li table.priority-grid td, 
 .priorities-form li table.priority-grid th {
     max-width:9em;
+    text-align:center;
 }
 
 .priorities-form li table.priority-grid td input {
     width:60%;
     font-weight:bold;
+    text-align:center;
 } 
+
+.priorities-form input:focus, 
+.prioritization input:focus {
+    background-color:yellow !important;
+    font-weight:bold;
+    ouline:none;
+    padding:0.1em;
+    border:1px solid #666;
+}
+
+.priorities-form li table.priority-grid th {
+    color:#062;
+    padding:0.1em 0.4em;
+}
+
+.score-value {
+    font-size:140%;
+    font-weight:bold;
+}
+
+.detail-value.scores {
+    background-color:#ffa !important;
+    padding-left:1em !important;
+    width:100%;
+}
+
+em.subtle {
+    color:#999 !important;
+    font-size:90%;
+}

@@ -11,7 +11,6 @@
         if (el instanceof $) {
             el = el[0];  // bare DOM element
         }
-        console.log(style(el, null));
         return style(el, null).backgroundColor;
     }
 

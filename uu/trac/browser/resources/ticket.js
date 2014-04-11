@@ -8,6 +8,7 @@
         $(el).toggleClass('selected');
     }
 
+
     function toggleInputHighlight(evt) {
         var _input = $(evt.currentTarget),
             cell = $(_input.parents('td')[0]),
@@ -16,13 +17,20 @@
         selectToggle(cell);
     }
 
+    function markDirty(evt) {
+        var _input = $(evt.currentTarget),
+            cell = $(_input.parents('td')[0]),
+            li = $(_input.parents('li')[0]);
+        li.addClass('dirty');
+    }
+
     function hookupInputs() {
         $('.priorities-form .priority-grid input').each(function () {
             var input = $(this);
             input.focus(toggleInputHighlight);
             input.blur(toggleInputHighlight);
+            input.change(markDirty);
         });
-
     }
 
     $(document).ready(function () {
@@ -33,7 +41,6 @@
         });
         /* highlights */
         hookupInputs();
-
     });
 
 }(jQuery));

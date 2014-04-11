@@ -152,6 +152,14 @@ class ListingView(TemplatedView):
         if self.request.get('REQUEST_METHOD') == 'POST':
             if self.request.get('save.priorities', None) is not None:
                 self.save_priorities()
+            _progress = lambda k: k if 'saveprogress-' in k else None
+            _nonempty = lambda k: k is not None
+            progress = filter(
+                _nonempty,
+                map(_progress, self.request.form.keys())
+                )
+            if progress:
+                self.save_priorities()
 
 
 class ListingImport(TemplatedView):

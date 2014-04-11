@@ -294,8 +294,14 @@ em.subtle {
     color:#205c90 !important;
 }
 
-/* selected/hightlighted listing rows */
+#content-core .priorities-form li input.commit {
+    display:block;
+    position:relative;
+    top:3.6em;
+    right:0.3em;
+}
 
+/* selected/hightlighted listing rows */
 
 .priorities-form li table.priority-grid td.selected {
     background-color: #063;
@@ -312,4 +318,10 @@ em.subtle {
 #content-core .priorities-form li.selected h4 a {
     color:black;
     text-decoration:underline;
+}
+
+/* modified unsaved records */
+
+.priorities-form li.dirty {
+    background-color:#988;
 }

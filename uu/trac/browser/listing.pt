@@ -89,6 +89,7 @@
                 </tr>
     
             </table>
+            <input type="submit" name="" class="commit" value="&#x2713;" tal:attributes="name string:saveprogress-${tnum}" />
             <div style="clear:both;"> </div>
         </div>
       </tal:block>

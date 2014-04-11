@@ -53,7 +53,8 @@
                          ticket python:context.get(str(tnum));
                          tview nocall:ticket/@@ticket_view;
                          tupdate python:tview.update();">
-        
+       
+        <a name="" tal:attributes="name string:ticket-${ticket/getId}" />
         <h4><a href="" tal:attributes="href ticket/absolute_url" tal:content="ticket/Title"># TITLE</a></h4>
         <div class="detail">
             <div class="childtask-len" tal:condition="ticket/children">

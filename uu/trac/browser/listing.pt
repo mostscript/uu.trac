@@ -65,9 +65,12 @@
             <div class="detail-value" tal:content="ticket/component">COMPONENT</div>
             <div class="detail-value" tal:content="ticket/task_type">TYPE</div>
             <div class="detail-value" tal:content="ticket/estimate">EST</div>
-            <div class="detail-value scores">
-                <span class="score-value" tal:content="ticket/score">SCORE</span> / 
-                <span class="reward-value" tal:content="python:'%.3f' % ticket.reward_ratio()">REWARD</span>
+            <div class="detail-value scores" tal:define="reward ticket/reward_ratio">
+                <span class="score-value" tal:content="ticket/score">SCORE</span>
+                <tal:block condition="reward">
+                 / 
+                <span class="reward-value" tal:content="python:'%.3f' % reward">REWARD</span>
+                </tal:block>
             </div>
             <div style="clear:both;"> </div>
         </div>

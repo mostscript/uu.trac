@@ -293,3 +293,23 @@ em.subtle {
 .rubric-link-listing a {
     color:#205c90 !important;
 }
+
+/* selected/hightlighted listing rows */
+
+
+.priorities-form li table.priority-grid td.selected {
+    background-color: #063;
+}
+
+#content-core .priorities-form li.selected {
+    border:1px solid #999;
+    border-left:5px solid red;
+    background-color:#ffffd9;
+    box-shadow:10px 5px 5px black;
+    margin-bottom:0.5em;
+}
+
+#content-core .priorities-form li.selected h4 a {
+    color:black;
+    text-decoration:underline;
+}

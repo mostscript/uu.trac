@@ -180,7 +180,12 @@ class TracTicket(Item):
         return keys
 
     def score(self):
-        return sum(self.priorities.values())
+        return sum(
+            filter(
+                lambda v: v is not None,
+                self.priorities.values()
+                )
+            )
 
     def reward_ratio(self):
         if self.estimate > 0.0:

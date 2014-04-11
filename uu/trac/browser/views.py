@@ -130,8 +130,28 @@ class TicketView(TemplatedView):
 class ListingView(TemplatedView):
     """Standard view for a listing"""
 
+    def save_priorities(self, data=None):
+        req = self.request
+        savemap = {}
+        keys = [k for k in req.form.keys() if k.startswith('priority-')]
+        _comp = lambda k: tuple(k.replace('priority-', '').split('-') + [k])
+        ckeys = map(_comp, keys)
+        # compute a map of priorities to save, keyed by ticket number
+        for tid, name, key in ckeys:
+            tid = int(tid)
+            if tid not in savemap:
+                savemap[tid] = {}
+            savemap[tid][name] = req.get(key)
+        for tid, data in savemap.items():
+            ticket = self.context.get(str(tid))
+            view = TicketView(ticket, req)
+            view._load_priorities()
+            view.save_priorities(data)
+
     def update(self, *args, **kwargs):
-        pass  # TODO
+        if self.request.get('REQUEST_METHOD') == 'POST':
+            if self.request.get('save.priorities', None) is not None:
+                self.save_priorities()
 
 
 class ListingImport(TemplatedView):
